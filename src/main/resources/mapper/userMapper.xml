@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.board.users.mapper.UserMapper">  
+ 
+   <!-- insertUser -->
+   <insert id="insertUser">
+     INSERT INTO TUSER (
+	    USERID,
+	    PASSWD,
+	    USERNAME,
+	    EMAIL,
+	    UPOINT,
+	    REGDATE
+	) VALUES (
+	    #{ userid    },
+	    #{ passwd    },
+	    #{ username  },
+	    #{ email     },
+	    1000,
+	    SYSDATE	   
+	)
+   
+   </insert> 
+   
+   <!-- getUserList -->
+   <select  id="getUserList">
+   	 SELECT
+	    USERID,
+	    USERNAME,
+	    EMAIL,
+	    UPOINT,
+	    TO_CHAR( REGDATE, 'YYYY-MM-DD')  REGDATE 
+	FROM
+	    TUSER
+	ORDER BY  USERID ASC    
+   
+   </select>
+   
+   <delete  id="deleteUser">
+     DELETE  FROM  TUSER
+      WHERE  USERID = #{ userid  }   
+   </delete>
+   
+   <select id="getUser">
+     SELECT 
+        USERID,
+        PASSWD,
+	    USERNAME,
+	    EMAIL,
+	    UPOINT,
+	    TO_CHAR( REGDATE, 'YYYY-MM-DD HH24:MI:SS DAY') REGDATE
+      FROM  TUSER
+      WHERE USERID = #{ userid }
+   </select>
+   
+   <update  id="updateUser">
+   
+      UPDATE   TUSER
+       SET     USERNAME =  #{ username }
+             , PASSWD   =  #{ passwd }
+             , EMAIL    =  #{ email } 
+       WHERE   USERID   =  #{ userid  }
+   
+   </update>
+   
+   <!-- idDupCheck -->
+   <select id="idDupCheck">
+     SELECT  
+        USERID,
+        PASSWD,
+	    USERNAME,
+	    EMAIL,
+	    UPOINT,
+	    TO_CHAR( REGDATE, 'YYYY-MM-DD HH24:MI:SS DAY') REGDATE
+      FROM   TUSER
+      WHERE  USERID = #{ userid } 
+      
+   </select>
+   
+   <!-- login userid : arg0, param1, passwd : arg1, param2-->
+   <select  id="login">
+     SELECT
+	    USERID,
+	    PASSWD,
+	    USERNAME,
+	    EMAIL,
+	    UPOINT,
+	    REGDATE
+	FROM
+	    TUSER
+	WHERE 
+	    USERID = #{ arg0  }
+	 AND
+	    PASSWD = #{ arg1  }
+   </select>
+   
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

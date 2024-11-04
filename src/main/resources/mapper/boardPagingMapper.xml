@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.board.paging.mapper.BoardPagingMapper">  
+   
+   <select  id="count">
+     
+     SELECT  COUNT(*)  AS CNT
+      FROM   BOARD
+      WHERE  MENU_ID = #{ menu_id  }
+      
+   </select>
+   
+   <!--  BoardPagingList  -->
+   <select  id="getBoardPagingList">
+     SELECT
+           IDX
+         , MENU_ID
+         , TITLE
+         , WRITER
+         , TO_CHAR(REGDATE, 'YYYY-MM-DD') REGDATE
+         , HIT         
+      FROM
+         BOARD
+      <where> 
+        <if test="arg0 != null and arg0 != ''"> 
+          AND  MENU_ID  =  #{ arg0 }
+        </if> 
+        <if test="arg1 != null and arg1!= ''"> 
+          AND  TITLE    =  #{ arg1 }
+        </if> 
+        <if test="arg2 != null and arg2 != ''"> 
+          AND  WRITER   =  #{ arg2 }
+        </if> 
+        <if test="arg3 != null and arg3 != ''"> 
+          AND  CONTENT  =  #{ arg3 }
+        </if>
+       </where>
+       ORDER  BY  IDX  DESC
+       OFFSET #{ arg4 } ROWS FETCH NEXT #{ arg5 } ROWS ONLY
+     
+   </select>
+   
+   <!-- 조회수증가    --> 
+   <select  id="incHit">
+      UPDATE  BOARD 
+       SET    HIT  = HIT + 1
+       WHERE  IDX  = #{ idx }
+   </select>
+   
+   <!-- idx 로 게시글 조회   --> 
+   <select  id="getBoard">
+     
+     SELECT
+	    IDX,
+	    MENU_ID,
+	    TITLE,
+	    CONTENT,
+	    WRITER,
+	    TO_CHAR(REGDATE, 'YYYY-MM-DD HH24:MI:SS') REGDATE,
+	    HIT
+	FROM
+	    BOARD
+	WHERE 
+	    IDX  =   #{ idx  }
+   </select>
+   
+   <insert id="insertBoard">
+     INSERT INTO BOARD (
+	    IDX,
+	    MENU_ID,
+	    TITLE,
+	    CONTENT,
+	    WRITER
+	) VALUES (
+	    ( SELECT NVL(MAX(IDX), 0)+1  FROM  BOARD ),
+	    #{ menu_id },
+	    #{ title   },
+	    #{ content },
+	    #{ writer  } 
+	) 
+   </insert>
+   
+   <delete id="deleteBoard">
+     DELETE
+      FROM BOARD
+      WHERE IDX = #{ idx }
+   </delete>
+   
+   <update id="updateBoard">
+     UPDATE BOARD
+      SET TITLE = #{ title }, CONTENT = #{ content }
+      WHERE IDX = #{ idx }
+   </update>
+</mapper>
