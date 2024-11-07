@@ -22,14 +22,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		//  -> http://localhost:9090/Board 밑의 모든 파일
 		
 		/* 로그인 기능 일시 정지 */
-		
+		/*
 		registry.addInterceptor( authInterceptor )
 		//        .addPathPatterns("/**")		        
 		        .addPathPatterns("/Board/**", "/BoardPaging/**")		        
 		        .excludePathPatterns("/css/**", "/img/**", "/js/**");
 		
 		WebMvcConfigurer.super.addInterceptors(registry);
-		
+		*/
 	}
 	
 }
